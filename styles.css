@@ -52,6 +52,10 @@ body{
 .btn.outline{background:transparent;border:1px solid rgba(255,255,255,0.06)}
 .btn.large{padding:0.8rem 1.2rem;font-size:1.1rem}
 
+/* quick-info links */
+.quick-info a{color:#ffffff;text-decoration:none;transition:color .18s}
+.quick-info a:hover{color:#dbdbdb}
+
 /* avatar card */
 .avatar-card{
   background:linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
