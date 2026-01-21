@@ -1,6 +1,30 @@
-// small interaction and webcam logic
+// small interaction and enhancement logic
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Theme toggle with preference persistence
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const storedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (storedTheme) {
+    root.setAttribute('data-theme', storedTheme);
+  } else if (prefersDark) {
+    root.setAttribute('data-theme', 'dark');
+  }
+
+  const updateThemeIcon = () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    if (themeToggle) themeToggle.textContent = isDark ? '◑' : '◐';
+  };
+  updateThemeIcon();
+
+  themeToggle?.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    updateThemeIcon();
+  });
 
   // avatar parallax tilt effect
   const card = document.getElementById('avatarCard');
@@ -23,9 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!links) return;
     links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
     links.style.flexDirection = 'column';
-    links.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.02), transparent)';
+    links.style.background = 'var(--surface)';
     links.style.padding = '0.7rem';
-    links.style.borderRadius = '10px';
+    links.style.borderRadius = '12px';
+    links.style.border = '1px solid var(--border)';
   });
 
   // Skill bar animations
@@ -51,16 +76,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Progressive enhancement: if profile image fails to load, fallback to initials
   const avatarImg = document.getElementById('avatar');
-  avatarImg.addEventListener('error', () => {
+  avatarImg?.addEventListener('error', () => {
     // fallback to generated data URL with initials
     const canvas = document.createElement('canvas');
     canvas.width = 240; canvas.height = 240;
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#111827';
+    ctx.fillStyle = '#1c1f23';
     ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.font = 'bold 96px sans-serif'; ctx.fillStyle = '#7C3AED';
+    ctx.font = 'bold 96px sans-serif'; ctx.fillStyle = '#c16b4a';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('YN', canvas.width/2, canvas.height/2 + 10); // Change these initials to yours
+    ctx.fillText('FB', canvas.width/2, canvas.height/2 + 10);
     avatarImg.src = canvas.toDataURL();
   });
 
@@ -73,4 +98,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
     });
   });
+
+  // Scroll-driven ambient background movement
+  let ticking = false;
+  const updateScroll = () => {
+    document.documentElement.style.setProperty('--scroll-y', window.scrollY.toFixed(2));
+    ticking = false;
+  };
+  const onScroll = () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateScroll);
+      ticking = true;
+    }
+  };
+  updateScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 });
