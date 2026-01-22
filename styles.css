@@ -54,12 +54,14 @@ body::after{
   pointer-events:none;
   transform: translate3d(0, calc(var(--scroll-y, 0) * -0.08px), 0) rotate(0.001deg);
   transition: opacity .4s ease;
+  animation: drift 12s ease-in-out infinite;
 }
 
 body::before{
   background: radial-gradient(42vmax 30vmax at 15% 20%, var(--glow-1), transparent 60%),
               radial-gradient(36vmax 28vmax at 85% 80%, var(--glow-2), transparent 60%);
   opacity:0.9;
+  animation-delay: -6s;
 }
 
 body::after{
@@ -67,6 +69,7 @@ body::after{
               radial-gradient(32vmax 28vmax at 10% 85%, rgba(0,0,0,0.08), transparent 60%);
   opacity:0.35;
   transform: translate3d(0, calc(var(--scroll-y, 0) * 0.05px), 0) rotate(0.001deg);
+  animation-delay: -12s;
 }
 
 .scroll-curve{
@@ -84,6 +87,102 @@ body::after{
   opacity:0.5;
   transform: translate3d(0, calc(var(--scroll-y, 0) * 0.12px), 0) rotate(-8deg);
   filter: blur(0.2px);
+  animation: curveSweep 14s ease-in-out infinite;
+}
+
+.code-pattern{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  opacity:0.35;
+  background-image:
+    linear-gradient(transparent 96%, rgba(0,0,0,0.06) 96%),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0 1px, transparent 1px 18px),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0 1px, transparent 1px 18px),
+    repeating-linear-gradient(135deg, rgba(193,107,74,0.08) 0 2px, transparent 2px 16px);
+  background-size: 100% 28px, 18px 18px, 18px 18px, 24px 24px;
+  transform: translate3d(0, calc(var(--scroll-y, 0) * 0.2px), 0);
+  animation: codeDrift 16s linear infinite;
+}
+
+[data-theme="dark"] .code-pattern{
+  opacity:0.28;
+  background-image:
+    linear-gradient(transparent 96%, rgba(255,255,255,0.08) 96%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 18px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 18px),
+    repeating-linear-gradient(135deg, rgba(122,154,134,0.14) 0 2px, transparent 2px 16px);
+}
+
+.code-icons{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: color-mix(in srgb, var(--accent) 60%, var(--text) 40%);
+  opacity:0.35;
+}
+
+.code-icons span{
+  position:absolute;
+  font-size:clamp(0.9rem, 1.2vw, 1.4rem);
+  letter-spacing:0.08em;
+  animation: floatIcons 11s ease-in-out infinite;
+  transform: translate3d(0, calc(var(--scroll-y, 0) * 0.12px), 0);
+  text-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+.code-icons span:nth-child(1){top:10%;left:8%;animation-duration:12s}
+.code-icons span:nth-child(2){top:22%;left:76%;animation-duration:15s}
+.code-icons span:nth-child(3){top:38%;left:18%;animation-duration:13s}
+.code-icons span:nth-child(4){top:55%;left:68%;animation-duration:14s}
+.code-icons span:nth-child(5){top:70%;left:28%;animation-duration:11s}
+.code-icons span:nth-child(6){top:78%;left:82%;animation-duration:13s}
+.code-icons span:nth-child(7){top:46%;left:48%;animation-duration:16s}
+.code-icons span:nth-child(8){top:14%;left:52%;animation-duration:12s}
+.code-icons span:nth-child(9){top:62%;left:8%;animation-duration:14s}
+.code-icons span:nth-child(10){top:88%;left:60%;animation-duration:17s}
+.code-icons span:nth-child(11){top:8%;left:32%;animation-duration:18s}
+.code-icons span:nth-child(12){top:30%;left:90%;animation-duration:13s}
+.code-icons span:nth-child(13){top:52%;left:36%;animation-duration:15s}
+.code-icons span:nth-child(14){top:66%;left:54%;animation-duration:12s}
+.code-icons span:nth-child(15){top:82%;left:14%;animation-duration:16s}
+.code-icons span:nth-child(16){top:18%;left:64%;animation-duration:11s}
+.code-icons span:nth-child(17){top:42%;left:6%;animation-duration:15s}
+.code-icons span:nth-child(18){top:92%;left:78%;animation-duration:18s}
+
+[data-theme="dark"] .code-icons{
+  color: color-mix(in srgb, var(--accent-2) 70%, var(--text) 30%);
+  opacity:0.28;
+}
+
+@keyframes drift{
+  0%, 100%{transform: translate3d(0, calc(var(--scroll-y, 0) * -0.08px), 0) scale(1)}
+  50%{transform: translate3d(0, calc(var(--scroll-y, 0) * -0.06px), 0) scale(1.02)}
+}
+
+@keyframes curveSweep{
+  0%, 100%{
+    transform: translate3d(0, calc(var(--scroll-y, 0) * 0.12px), 0) rotate(-10deg);
+    opacity:0.4;
+  }
+  50%{
+    transform: translate3d(0, calc(var(--scroll-y, 0) * 0.16px), 0) rotate(-4deg);
+    opacity:0.6;
+  }
+}
+
+@keyframes codeDrift{
+  0%{background-position: 0 0, 0 0, 0 0, 0 0}
+  50%{background-position: 0 14px, 12px 24px, -10px 18px, 20px -10px}
+  100%{background-position: 0 28px, 24px 48px, -20px 36px, 40px -20px}
+}
+
+@keyframes floatIcons{
+  0%, 100%{transform: translate3d(0, calc(var(--scroll-y, 0) * 0.12px), 0) translateY(0)}
+  50%{transform: translate3d(0, calc(var(--scroll-y, 0) * 0.12px), 0) translateY(-16px)}
 }
 
 /* layout */
@@ -251,6 +350,16 @@ body::after{
   .skills-grid{gap:0.9rem}
   .contact-cta{padding:1.5rem}
   .contact-card{padding:1.2rem}
+}
+
+@media (prefers-reduced-motion: reduce){
+  body::before,
+  body::after,
+  .scroll-curve,
+  .code-pattern,
+  .code-icons span{
+    animation: none !important;
+  }
 }
 
 /* micro-animations */
